@@ -1,6 +1,8 @@
 package dieguidev.devtree.controller;
 
+import dieguidev.devtree.dto.auth.LoginUserDto;
 import dieguidev.devtree.dto.auth.RegisterUserDto;
+import dieguidev.devtree.dto.auth.ResponseLoginDto;
 import dieguidev.devtree.dto.auth.ResponseUserDto;
 import dieguidev.devtree.persistence.entity.security.User;
 import dieguidev.devtree.service.AuthenticationService;
@@ -21,13 +23,13 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<ResponseUserDto> registerUser (@RequestBody @Valid RegisterUserDto registerUserDto){
         User user = authenticationService.registerUser(registerUserDto);
-        ResponseUserDto responseUserDto = new ResponseUserDto();
-        responseUserDto.setId(user.getId());
-        responseUserDto.setHandle(user.getHandle());
-        responseUserDto.setName(user.getName());
-        responseUserDto.setEmail(user.getEmail());
-        responseUserDto.setIsActive(user.getIsActive());
-        responseUserDto.setCreatedAt(user.getCreatedAt());
+        ResponseUserDto responseUserDto = ResponseUserDto.fromUser(user);
         return ResponseEntity.ok(responseUserDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseLoginDto> loginUser(@RequestBody @Valid LoginUserDto loginUserDto) {
+        ResponseLoginDto responseLoginDto = authenticationService.login(loginUserDto);
+        return ResponseEntity.ok(responseLoginDto);
     }
 }
