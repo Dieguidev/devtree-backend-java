@@ -25,11 +25,14 @@ public class CustomerDetailsService implements UserDetailsService {
 
     private User userDetail;
 
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Dentro de loadUserByUsername {}", username);
         userDetail = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+
 
 
         return new org.springframework.security.core.userdetails.User(userDetail.getEmail(), userDetail.getPassword(), new ArrayList<>());
@@ -39,4 +42,6 @@ public class CustomerDetailsService implements UserDetailsService {
     public User getUserDetail() {
         return userDetail;
     }
+
+
 }
